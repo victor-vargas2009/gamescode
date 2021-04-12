@@ -6,7 +6,7 @@
 
 https://victor-vargas2009.github.io/gamescode/
 
-# My Blog
+# GamesCode
 
 
 _powered by [fastpages](https://github.com/fastai/fastpages)_
