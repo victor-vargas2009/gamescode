@@ -8,15 +8,15 @@
 <meta name="generator" content="Jekyll v4.1.1" />
 <meta property="og:title" content="The MNIST Experiment" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="As part of FastAI DL Course V4 Chapter 4 we will be creating an MNIST Digit Classifier." />
-<meta property="og:description" content="As part of FastAI DL Course V4 Chapter 4 we will be creating an MNIST Digit Classifier." />
-<link rel="canonical" href="https://victor-vargas2009.github.io/gamescode/fastai/vision/2021/05/08/The-MNIST-Experiment.html" />
-<meta property="og:url" content="https://victor-vargas2009.github.io/gamescode/fastai/vision/2021/05/08/The-MNIST-Experiment.html" />
+<meta name="description" content="Creating an MNIST Digit Classifier as part of FastAI DL Course V4 Chapter 4" />
+<meta property="og:description" content="Creating an MNIST Digit Classifier as part of FastAI DL Course V4 Chapter 4" />
+<link rel="canonical" href="https://victor-vargas2009.github.io/gamescode/fastai/vision/mnist/2021/05/08/The-MNIST-Experiment.html" />
+<meta property="og:url" content="https://victor-vargas2009.github.io/gamescode/fastai/vision/mnist/2021/05/08/The-MNIST-Experiment.html" />
 <meta property="og:site_name" content="GamesCode" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2021-05-08T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"As part of FastAI DL Course V4 Chapter 4 we will be creating an MNIST Digit Classifier.","url":"https://victor-vargas2009.github.io/gamescode/fastai/vision/2021/05/08/The-MNIST-Experiment.html","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://victor-vargas2009.github.io/gamescode/fastai/vision/2021/05/08/The-MNIST-Experiment.html"},"headline":"The MNIST Experiment","dateModified":"2021-05-08T00:00:00-05:00","datePublished":"2021-05-08T00:00:00-05:00","@context":"https://schema.org"}</script>
+{"description":"Creating an MNIST Digit Classifier as part of FastAI DL Course V4 Chapter 4","url":"https://victor-vargas2009.github.io/gamescode/fastai/vision/mnist/2021/05/08/The-MNIST-Experiment.html","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://victor-vargas2009.github.io/gamescode/fastai/vision/mnist/2021/05/08/The-MNIST-Experiment.html"},"headline":"The MNIST Experiment","dateModified":"2021-05-08T00:00:00-05:00","datePublished":"2021-05-08T00:00:00-05:00","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/gamescode/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://victor-vargas2009.github.io/gamescode/feed.xml" title="GamesCode" /><link rel="shortcut icon" type="image/x-icon" href="/gamescode/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
@@ -71,13 +71,13 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">The MNIST Experiment</h1><p class="page-description">As part of FastAI DL Course V4 Chapter 4 we will be creating an MNIST Digit Classifier.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2021-05-08T00:00:00-05:00" itemprop="datePublished">
+    <h1 class="post-title p-name" itemprop="name headline">The MNIST Experiment</h1><p class="page-description">Creating an MNIST Digit Classifier as part of FastAI DL Course V4 Chapter 4</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2021-05-08T00:00:00-05:00" itemprop="datePublished">
         May 8, 2021
       </time>
        • <span class="read-time" title="Estimated read time">
     
     
-      17 min read
+      16 min read
     
 </span></p>
 
@@ -88,6 +88,9 @@ window.onload = wrap_img;
         &nbsp;
       
         <a class="category-tags-link" href="/gamescode/categories/#vision">vision</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/gamescode/categories/#mnist">mnist</a>
         
       
       </p>
@@ -129,13 +132,14 @@ window.onload = wrap_img;
         
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Welcome!">Welcome!<a class="anchor-link" href="#Welcome!"> </a></h2><p>Hello and welcome to another of my adventures! Today we will be building a neural network using the MNIST Digits Data Set for digit detection.</p>
-<p>We will have a chance to <em>”decompose”</em> a simple neural network, see how it looks from the inside, we will create our loss function, accuracy metric and see how a network learns, all within this exercise.</p>
-<p>I’m so excited to share this with you and I want to say that doing this small project was and still is <strong>one of my favorite projects I have ever done</strong>.</p>
-<p>Now before we start I should say, I had some issues with math, I forgot a lot of calculus and had to go back and review some concepts, including some <a href="https://youtube.com/playlist?list=PLZHQObOWTQDMsr9K-rj53DwVRMYO3t5Yr">calculus (derivatives)</a>, <a href="https://machinelearningmastery.com/difference-between-a-parameter-and-a-hyperparameter/">Deep Learning parameters and hyperparameters</a> and some FastAI, pytorch, python functions that made the exercise easier to practice.</p>
-<p>Finally I would like to say this exercise is based on <a href="https://course.fast.ai/videos/?lesson=4">FastAI Course Lesson 4</a>. in case you want to review some further details regarding this and other exercises.</p>
-<h3 id="Data-Structure-Review">Data Structure Review<a class="anchor-link" href="#Data-Structure-Review"> </a></h3><p>First things first, let's unpack the data and review it. FastAI already has a way for us to download the MNIST data set in full. We will download it, unpack it, and see its contents.</p>
-<p>Some key questions we want answers for are:</p>
+<h2 id="Building-a-digit-detection-neural-net">Building a digit-detection neural net<a class="anchor-link" href="#Building-a-digit-detection-neural-net"> </a></h2><p>Hello and welcome to another of my adventures! Today we will be building a digit detection neural network using the MNIST Digits Data Set. This data set is a freely-available set of handwritten digits (0-9) and will be used to train our neural net.</p>
+<p>Using this data set we will <em>”decompose”</em> a simple neural network, which will allow us to see how it looks from the inside. We will also create our loss function, accuracy metric and see how a network learns, all within this exercise.</p>
+<h3 id="Before-we-Start">Before we Start<a class="anchor-link" href="#Before-we-Start"> </a></h3><p>Doing this small project was and still is <strong>one of my favorite projects I have ever done</strong> and I am excited to share it with you!</p>
+<p>This project does involve some calculus. If you are like me it has been a while and so it will help to go back and review some concepts, including some <a href="https://youtube.com/playlist?list=PLZHQObOWTQDMsr9K-rj53DwVRMYO3t5Yr">calculus (derivatives)</a>, <a href="https://machinelearningmastery.com/difference-between-a-parameter-and-a-hyperparameter/">Deep Learning parameters and hyperparameters</a>.</p>
+<p>Once you know these concepts there are some FastAI, pytorch, python functions that made the concepts easier to practice and implement.</p>
+<p>Finally,  this exercise is based on (FastAI Course)[course.fast.ai] Lesson 4. You want to click the link if you'd like to review some further details regarding this and other exercises.</p>
+<h3 id="Data-Structure-Review">Data Structure Review<a class="anchor-link" href="#Data-Structure-Review"> </a></h3><p>First things first, we need to know what this data looks like. Let's unpack the data and review it. FastAI already has a way for us to download the full MNIST data set. We will download it, unpack it, and see its contents.</p>
+<p>In order to generate our dataset, there are some key questions we need to answer:</p>
 <ul>
 <li>How is the data structured?</li>
 <li>Does it have a validation set?</li>
@@ -152,24 +156,9 @@ window.onload = wrap_img;
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">untar_data</span><span class="p">(</span><span class="n">URLs</span><span class="o">.</span><span class="n">MNIST</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    
-
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Path</span><span class="o">.</span><span class="n">BASE_PATH</span> <span class="o">=</span> <span class="n">path</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># This will download the data and get it ready for the us to review the data set contents</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">untar_data</span><span class="p">(</span><span class="n">URLs</span><span class="o">.</span><span class="n">MNIST</span><span class="p">)</span>
+<span class="n">Path</span><span class="o">.</span><span class="n">BASE_PATH</span> <span class="o">=</span> <span class="n">path</span>
 <span class="n">path</span><span class="o">.</span><span class="n">ls</span><span class="p">()</span>
 </pre></div>
 
@@ -198,7 +187,7 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Ok so we can see the data is divided into 2 separate data sets, testing (validation) and training sets and each of them contains a folder that identifies the digit of the images it contains. We should be able to examine the contents of one of the folders and render one of the images.</p>
+<p>Based on the download, we can see that the data is divided into 2 separate data sets, 'testing' (validation) and 'training' sets. Let’s explore the dataset a little more using the function ls().</p>
 
 </div>
 </div>
@@ -237,6 +226,14 @@ window.onload = wrap_img;
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As we can see from the output, both the testing and training datasets contain folders that represents the digit of the images contained within that folder.</p>
+<p>Now lets use Image.open() to render one of the images</p>
+
+</div>
+</div>
+</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -244,7 +241,8 @@ window.onload = wrap_img;
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">((</span><span class="n">path</span><span class="o">/</span><span class="s1">&#39;training&#39;</span><span class="o">/</span><span class="s1">&#39;8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">ls</span><span class="p">()</span><span class="o">.</span><span class="n">sorted</span><span class="p">()[</span><span class="mi">999</span><span class="p">])</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Renderding an image from the training set of the digit number 8</span>
+<span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">((</span><span class="n">path</span><span class="o">/</span><span class="s1">&#39;training&#39;</span><span class="o">/</span><span class="s1">&#39;8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">ls</span><span class="p">()</span><span class="o">.</span><span class="n">sorted</span><span class="p">()[</span><span class="mi">999</span><span class="p">])</span>
 </pre></div>
 
     </div>
@@ -273,18 +271,19 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>It looks like a very simple image that contains the digit number in black and white. As we saw from the details above I think we have a way to answer our questions and that will help us generate our dataset:</p>
+<p>It looks like a very simple image that contains the digit number in black and white. Based on what we learned so far we are able to answer our key questions, which will help us generate our dataset:</p>
 <h4 id="How-is-the-data-structured?">How is the data structured?<a class="anchor-link" href="#How-is-the-data-structured?"> </a></h4><p><em>We have 2 folders 1 for the training data and one for testing data.</em></p>
-<h4 id="Does-it-have-a-validation-set?">Does it have a validation set?<a class="anchor-link" href="#Does-it-have-a-validation-set?"> </a></h4><p><em>Yes</em></p>
+<h4 id="Does-it-have-a-validation-set?">Does it have a validation set?<a class="anchor-link" href="#Does-it-have-a-validation-set?"> </a></h4><p><em>Yes, the testing data set</em></p>
 <h4 id="How-is-the-data-labeled?">How is the data labeled?<a class="anchor-link" href="#How-is-the-data-labeled?"> </a></h4><p><em>Within each of the folders (testing and training) we have child folders that represent the digits and finally within those we have our data</em></p>
 <h3 id="Data-Set-Definition">Data Set Definition<a class="anchor-link" href="#Data-Set-Definition"> </a></h3><p>Using the answers from the questions above we need to come up with a small script that helps us build our data set.</p>
 <p>Here are the criteria for building our script:</p>
 <ol>
-<li>Grab the images within our training and testing folders.</li>
+<li>Grab all images from both the training and testing folders</li>
 <li>Traverse each folder structure in order to grab all the digit folders within.</li>
 <li>Grab the images within each digit folder and store them in a way we can label and use them for training and validation.</li>
 <li>Use the folder names to generate our labels for each of the images</li>
 </ol>
+<p>Let's look at the following script and see how we can accomplish it.</p>
 
 </div>
 </div>
@@ -345,15 +344,16 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="/gamescode/images/copied_from_nb/MNIST/training_data_grid.png" alt="Training Data" /></p>
+<h4 id="Script-Results">Script Results<a class="anchor-link" href="#Script-Results"> </a></h4><p><img src="/gamescode/images/copied_from_nb/MNIST/training_data_grid.png" alt="Training Data" /></p>
+<p>Looks good! The digits and folders appear to be reasonably well distributed.</p>
+<p>Now that we have added all of the difits to our <em>training_paths</em> array we can use it to open the images, map the pixel values to a tensor and finally divide them by 255 (max number a pixel value can be) since we want values that fit between 0 and 1 for the resulting images.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Now that we have our <em>training_paths</em> we can use it to open the images, map the pixel values to a tensor and finally divide them by 255 since we want values that fit between 0 and 1 for the pixel images.</p>
-
+<h4 id="Normalizing-the-training-data-set">Normalizing the training data set<a class="anchor-link" href="#Normalizing-the-training-data-set"> </a></h4>
 </div>
 </div>
 </div>
@@ -398,13 +398,19 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Validation-Data-Set">Validation Data Set<a class="anchor-link" href="#Validation-Data-Set"> </a></h3><p>Once we have processed the training data set we can perform the same routine to the validation data set so that we can:</p>
+<h3 id="Validation-Data-Set">Validation Data Set<a class="anchor-link" href="#Validation-Data-Set"> </a></h3><p>Now that we have processed the training data set, we can perform the same routine to the validation data with the same objectives:</p>
 <ol>
-<li>Collect all the validation set images.</li>
-<li>Generate the label data.</li>
-<li>Process the images in a way our model can read it.</li>
+<li>Collecto all the validation set images</li>
+<li>Generate labels for all the images</li>
+<li>Process the images in a way our model can read it</li>
 </ol>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Processing-the-validation-data-set">Processing the validation data set<a class="anchor-link" href="#Processing-the-validation-data-set"> </a></h4>
 </div>
 </div>
 </div>
@@ -449,10 +455,10 @@ window.onload = wrap_img;
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>We can now perform the same functionality as in the training set:</p>
+<p>We can now perform the same normalization as in the training set:</p>
 <ul>
-<li>Open the images as a tensor.</li>
-<li>Convert the numbers to be between 0 and 1.</li>
+<li>Open the images as a tensor</li>
+<li>Convert the numbers to be between 0 and 1</li>
 </ul>
 
 </div>
@@ -495,8 +501,8 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Data-Review">Data Review<a class="anchor-link" href="#Data-Review"> </a></h3><p>When dealing with images, something that really helped me was to visualize what was going to happen and experiment a little with the data. Jeremy did something similar in the course where he opened the image so we can see the underlying data and try to understand and figure out how the machine would process it.</p>
-<p>So in the next cell we will be grabbing one of the images in the training data, open it with pandas and render the contents using a data frame grid.</p>
+<h3 id="Data-Review">Data Review<a class="anchor-link" href="#Data-Review"> </a></h3><p>When dealing with images something that really helped me was to visualize what was going to happen and experiment a little with the data. Jeremy did something similar in the FastAI course where he opened the image so we could see the underlying data and try to understand and figure out how the machine would process it.</p>
+<p>In the next cell we will be grabbing one of the images in the training data, open it with pandas and render the contents using a data frame grid.</p>
 
 </div>
 </div>
@@ -523,25 +529,16 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><img src="/gamescode/images/copied_from_nb/MNIST/digit_pandas.png" alt="Digit in Pandas DF" /></p>
+<p>Viewing the data fram grid we can see that each image has 28x28 pixels, and each is represented by a number from 0 to 1 that represents the positive space, but before we are able to use our data sets we need to perform one more transformation.</p>
+<p>In order for our neural network to be able to train on our images we need to transform these images into tuples. The main reason for that is that the learner class we will be using accepts a sequence of images with labels, and currently, our images and labels are not paired but stored in separate tensors.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>After seeing how the data is composed, we can see that:</p>
-<ul>
-<li>Each image has numbers from 0 to 1 that represent each of the pixels in the image.</li>
-<li>We can use those pixel numbers and train a neural network to be able to identify the different digits.</li>
-</ul>
-<p>In order to use this data we will need to perform 1 more transformation...</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Tuples-and-Data-Sets">Tuples and Data Sets<a class="anchor-link" href="#Tuples-and-Data-Sets"> </a></h3><p>We need to transform the training images like the one above into a vector by stacking all the pixels into 1 big column, and, create a <a href="https://docs.python.org/3/tutorial/datastructures.html#tuples-and-sequences">tuple</a> with the vectorized image and the corresponding label. We need to pass a list of tuples to the data loaders class which FastAI uses to create the training batches used when training a model.</p>
+<h3 id="Tuples-and-Data-Sets">Tuples and Data Sets<a class="anchor-link" href="#Tuples-and-Data-Sets"> </a></h3><p>We need to transform the training images like the one above into a vector by stacking all the pixels into 1 big column, next create a <a href="https://docs.python.org/3/tutorial/datastructures.html#tuples-and-sequences">tuple</a> with the vectorized image and the corresponding label.</p>
+<p>Finally, we will create a list of those tuples which will give us our 2 final data sets.</p>
 
 </div>
 </div>
@@ -590,7 +587,9 @@ window.onload = wrap_img;
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_dset</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span><span class="n">train_y</span><span class="p">))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># This function will create a list of tuples by matching the vector with the corresponding label</span>
+<span class="c1"># and we can use it in our data loader class and our learner</span>
+<span class="n">train_dset</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span><span class="n">train_y</span><span class="p">))</span>
 <span class="n">valid_dset</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">valid_x</span><span class="p">,</span><span class="n">valid_y</span><span class="p">))</span>
 </pre></div>
 
@@ -608,6 +607,12 @@ window.onload = wrap_img;
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Item-51000-in-the-training-dataset-(partial)-and-it's-visual-representation">Item 51000 in the training dataset (partial) and it's visual representation<a class="anchor-link" href="#Item-51000-in-the-training-dataset-(partial)-and-it's-visual-representation"> </a></h4>
+</div>
+</div>
+</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -615,7 +620,9 @@ window.onload = wrap_img;
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_dset</span><span class="p">[</span><span class="mi">51000</span><span class="p">]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Grab item 51000 access item 0 in the tuple and </span>
+<span class="c1"># finally show vector from row 150 to 200</span>
+<span class="n">train_dset</span><span class="p">[</span><span class="mi">51000</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">150</span><span class="p">:</span><span class="mi">200</span><span class="p">]</span>
 </pre></div>
 
     </div>
@@ -630,40 +637,9 @@ window.onload = wrap_img;
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>(tensor([0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.1255, 0.5804, 0.9922, 0.9922, 0.3137, 0.0000, 0.0000, 0.2157, 0.5804, 0.4863, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.7451, 0.9882, 0.9882, 0.9882, 0.9529, 0.1882, 0.2039, 0.9098, 0.9882, 0.8824, 0.0824, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0353, 0.5686, 0.9686, 0.9882, 0.9882, 0.9882, 0.8745, 0.1255, 0.4980, 0.9882, 0.9882,
-         0.9804, 0.2275, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0627, 0.7294, 0.9922, 0.9882, 0.9686, 0.7412, 0.5686, 0.1373,
-         0.0000, 0.7725, 0.9882, 0.9882, 0.7255, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.2510, 0.9882, 0.9922, 0.9882,
-         0.3882, 0.0000, 0.0000, 0.0000, 0.4549, 0.9765, 0.9882, 0.8157, 0.0706, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-         0.2510, 0.9922, 0.9961, 0.9373, 0.0667, 0.0000, 0.0000, 0.0980, 0.8902, 0.9922, 0.8471, 0.0706, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.2510, 0.9882, 0.9922, 0.9059, 0.2000, 0.0000, 0.0000, 0.6157, 0.9882, 0.9882, 0.4314, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.2510, 0.9882, 0.9922, 0.9882, 0.7412, 0.2000, 0.2431, 0.9922, 0.9882, 0.7059, 0.0275, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0824, 0.6039, 0.9922, 0.9882, 0.9882, 0.9059, 0.9373, 0.9922, 0.9059, 0.2000, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0706, 0.8196, 0.9882, 0.9882, 0.9882, 0.9882, 0.9922,
-         0.6588, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0706, 0.4157,
-         0.8784, 0.9922, 0.9922, 1.0000, 0.9922, 0.3922, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.4980, 0.9882, 0.9882, 0.9922, 0.9882, 0.9686, 0.3882, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.8784, 0.9882, 0.9569, 0.7490, 0.9882, 0.9882, 0.8667, 0.0824, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.2235, 0.9647, 0.9882, 0.5765, 0.0549, 0.8275, 0.9882, 0.9882, 0.4431, 0.0000, 0.0000, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.6784, 0.9882, 0.9882, 0.5765, 0.0000, 0.7451, 0.9882, 0.9882, 0.7490,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.7490, 0.9922, 0.9922, 0.1647, 0.2392,
-         0.8902, 0.9922, 0.9922, 0.3373, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.6078,
-         0.9882, 0.9882, 0.7843, 0.9922, 0.9882, 0.9882, 0.8039, 0.0431, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.3059, 0.9843, 0.9882, 0.9882, 0.9922, 0.9882, 0.7412, 0.2000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.8078, 0.9882, 0.9882, 0.9922, 0.8039, 0.2000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.2902, 0.8510, 0.9882, 0.5765, 0.1451, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000]),
- tensor(8))</pre>
+<pre>tensor([0.0000, 0.1255, 0.5804, 0.9922, 0.9922, 0.3137, 0.0000, 0.0000, 0.2157, 0.5804, 0.4863, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
+        0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.7451, 0.9882, 0.9882, 0.9882, 0.9529, 0.1882, 0.2039, 0.9098, 0.9882, 0.8824, 0.0824, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
+        0.0000, 0.0000])</pre>
 </div>
 
 </div>
@@ -676,9 +652,64 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Data-Loaders">Data Loaders<a class="anchor-link" href="#Data-Loaders"> </a></h3><p>The DataLoader class in FastAI is a class that will help us generate a mini batch of training and validation data that will be processed by the model in each epoch.</p>
-<p>The Data Loader class can be used even if we are not using a fully developed <em>cnn_learner</em> from FastAI, like, when we are customizing our learner or defining a model from scratch.</p>
-<p>Something I thought was very cool was that this decoupling of the architecture helps when people want to build a customized model; we have libraries, classes or pieces of code we can reuse; with the DataLoader class don't have to reinvent the wheel to create a class or method that help us load our data to our model</p>
+<h4 id="Label-of-item-51000">Label of item 51000<a class="anchor-link" href="#Label-of-item-51000"> </a></h4>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Grab item 51000 then access item 1 in tuple representing the label</span>
+<span class="n">train_dset</span><span class="p">[</span><span class="mi">51000</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>tensor(8)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Data-Set-Recap">Data Set Recap<a class="anchor-link" href="#Data-Set-Recap"> </a></h3><p>Let's do a quick recap of everything we have done up to this point. We have:</p>
+<ul>
+<li>Downloaded our images.</li>
+<li>Separated validation and training sets.</li>
+<li>Loaded the images into tensors.</li>
+<li>Transformed the pixel values to values ranging from 0 to 1.</li>
+<li>Transformed them into vectors and pair them with its corresponding labels.</li>
+</ul>
+<p>Our data sets are now ready to be used by a model for training and validation. In the next sections we will start loading our data, define our loss and accuracy functions and finally train our model.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Data-Loaders">Data Loaders<a class="anchor-link" href="#Data-Loaders"> </a></h2><p>First we need to load the data used for the training and validation, FastAI has a class that will help us pass the training and validation data to our model by generating a mini batch of data.</p>
+<p>The Data Loader class can be used even if we are not using a fully developed <em>cnn_learner</em> from FastAI, like, when we are defining our learner manually.</p>
+<p>This decoupling of the architecture is extremely cool. It is helpful when people want to build a customized model; we have libraries, classes or pieces of code we can reuse. With the DataLoader class we don't have to reinvent the wheel to create a class or method that help us load our data to our model.</p>
 
 </div>
 </div>
@@ -693,8 +724,8 @@ window.onload = wrap_img;
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_dl</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">train_dset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">valid_dl</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">valid_dset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="c1"># Next we will crate our neural network which will use the DataLoaders class that</span>
-<span class="c1"># holds our training and validation dataset</span>
+<span class="c1"># The DataLoaders Class is a parent of DataLoader and it holds 2</span>
+<span class="c1"># DataLoader instances one for training and one for validation</span>
 <span class="n">dls</span> <span class="o">=</span> <span class="n">DataLoaders</span><span class="p">(</span><span class="n">train_dl</span><span class="p">,</span> <span class="n">valid_dl</span><span class="p">)</span>
 </pre></div>
 
@@ -707,13 +738,18 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Accuracy-and-Loss">Accuracy and Loss<a class="anchor-link" href="#Accuracy-and-Loss"> </a></h3><p>These are 2 concepts that as Jeremy explained in the course can often be confused because both are a representation of our model performance.</p>
+<h3 id="Measuring-model-performance:-Accuracy-and-Loss">Measuring model performance: Accuracy and Loss<a class="anchor-link" href="#Measuring-model-performance:-Accuracy-and-Loss"> </a></h3><p>Accuracy and Loss are 2 representations for model performance that can often be confused because they both reflect performance:</p>
 <ul>
 <li>Accuracy usually represents the <em>average</em> of correct predictions in a model.</li>
-<li>Loss represents the rate of change of how much should we "update" (step) our weights to improve our predictions taking into account, the current learning rate, input and parameters for our model. Think of it as the <em>penalty for making a bad prediction</em>.</li>
+<li>Loss could be thought of as the penalty for making a bad prediction. Loss provides us with a rate of changeto our  weights to improve our predictions. Loss takes into account:<ul>
+<li>The current learning rate</li>
+<li>Input values</li>
+<li>Parameters for our model</li>
 </ul>
-<p>The loss is used in <em>Gradient Descent</em> by the machine to understand with that <em>penalty</em> or “punishment” if the parameters should be updated or not depending on the result of the prediction; taking into account that the loss function will penalize/punish heavily on worse predictions or lightly on better predictions.</p>
-<p>On the other hand <em>accuracy</em> is used by us, humans, understand the performance of our model so that we can validate and make decisions on whether we should be altering the <a href="https://machinelearningmastery.com/difference-between-a-parameter-and-a-hyperparameter/">hyperparameters</a> used by the learning process (batch size, number of epochs) to improve the performance of our model.</p>
+</li>
+</ul>
+<p>The loss is used in <em>Gradient Descent</em> by the machine to understand with that <em>penalty</em> or “punishment” if the parameters should be updated or not depending on the result of the prediction. The loss function will penalize/punish heavily on worse predictions in proportion to how close the prediction was.</p>
+<p>On the other hand <em>accuracy</em> is what helps us, humans, understand the performance of our model so that we can understand and make decisions on whether we should be altering <a href="https://machinelearningmastery.com/difference-between-a-parameter-and-a-hyperparameter/">hyperparameters</a> used by the learning process (batch size, number of epochs) to improve the performance of our model.</p>
 
 </div>
 </div>
@@ -727,7 +763,7 @@ window.onload = wrap_img;
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># This accuracy function will calculate the accuracy comparing the max values of the</span>
 <span class="c1"># inputs using argmax to get the max values of the passed inputs and then checking it </span>
-<span class="c1"># agaist the targets and finally calculate the mean</span>
+<span class="c1"># aganist the targets and finally calculate the mean</span>
 
 <span class="k">def</span> <span class="nf">batch_accuracy</span><span class="p">(</span><span class="n">xb</span><span class="p">,</span> <span class="n">yb</span><span class="p">):</span>
     <span class="n">xb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">xb</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -765,7 +801,7 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="The-Neural-Network">The Neural Network<a class="anchor-link" href="#The-Neural-Network"> </a></h3><p>Finally we have reached the moment to create our neural network. You will see that the definition of a network is actually not as complex we might think and you might be surprised (I was really surprised!!) that its composed of 3 functions, and how much it can do with only those 3 layers. Here is the definition of our very simple neural net, the function is actually small, and it has 3 different components:</p>
+<h3 id="Defining-The-Neural-Network">Defining The Neural Network<a class="anchor-link" href="#Defining-The-Neural-Network"> </a></h3><p>The definition of a network is not as complex as one might think and you might be surprised (as I was!) that in this case it’s composed of just 3 functions, and how much it can do with only those 3 layers. Here is the definition of a neural net:</p>
 
 <pre><code>simple_net(xb){
   res = xb@w1 + b1
@@ -774,9 +810,9 @@ window.onload = wrap_img;
   return res
 }</code></pre>
 <ol>
-<li>Layer that performs a matrix multiplication using the values of the image we are trying to predict times the layer 1 weights then adds it up with a bias.</li>
+<li>Layer that performs a matrix multiplication using the values of the image we are trying to predict multiplied by the layer 1 weights then add a bias.</li>
 <li>(Activation) Rectifier linear unity which will basically change any negative result from the previous layer into a 0.</li>
-<li>Final layer which will perform a matrix multiplication with the result of the previous operation times the weights of layer 2 and adds it up again to bias of layer 2.</li>
+<li>Final layer which will perform a matrix multiplication with the result of the previous operation multiplied by the weights of layer 2 and add the bias of layer 2.</li>
 </ol>
 
 </div>
@@ -789,7 +825,8 @@ window.onload = wrap_img;
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">simple_net</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Our very simple neural net</span>
+<span class="n">simple_net</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
     <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">28</span><span class="o">*</span><span class="mi">28</span><span class="p">,</span><span class="mi">50</span><span class="p">),</span>
     <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
     <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
@@ -805,15 +842,15 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Learner-Module">Learner Module<a class="anchor-link" href="#Learner-Module"> </a></h3><p>FastAI has a learner module that enables us to use our own model, optimizer, loss and metrics. The module would help us with:</p>
+<h3 id="Training-the-neural-net">Training the neural net<a class="anchor-link" href="#Training-the-neural-net"> </a></h3><p>FastAI has a learner module that enables us to use our own model, optimizer, loss and metrics. The module helps us with:</p>
 <ul>
 <li>Executing the training epochs.</li>
-<li>Call our optimizer to update our parameters.</li>
+<li>Calling our optimizer to update our parameters.</li>
 <li>Using the data loaders pass the mini batches to the training.</li>
-<li>Call our metric functions.</li>
+<li>Calling our metric functions.</li>
 <li>Give us an output of our training.</li>
 </ul>
-<p>I found this module very helpful, similarly to the DataLoaders module, the learner module decouples the API and for more advanced people enables them to customize every detail on the model and how they want to optimize the weights, metrics they want to use and more.</p>
+<p>Similar to DataLoaders class, this module is very helpful. The learner module decouples the API and supports advanced workflows by enabling users to customize every detail within the model including weight optmization, metrics, and more.</p>
 
 </div>
 </div>
@@ -825,7 +862,9 @@ window.onload = wrap_img;
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">learn</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">dls</span><span class="p">,</span> <span class="n">simple_net</span><span class="p">,</span> <span class="n">opt_func</span><span class="o">=</span><span class="n">SGD</span><span class="p">,</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Lets create our lerner, using our, DataLoaders instance, the simple neural net, </span>
+<span class="c1"># optimizer, loss and accuracy functions</span>
+<span class="n">learn</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">dls</span><span class="p">,</span> <span class="n">simple_net</span><span class="p">,</span> <span class="n">opt_func</span><span class="o">=</span><span class="n">SGD</span><span class="p">,</span>
                 <span class="n">loss_func</span><span class="o">=</span><span class="n">mnist_loss</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="n">batch_accuracy</span><span class="p">)</span>
 </pre></div>
 
@@ -836,6 +875,14 @@ window.onload = wrap_img;
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Training-Execution">Training Execution<a class="anchor-link" href="#Training-Execution"> </a></h4><p>The next line of code will execute 20 cycles (epochs) of training and validation using our Learner and DataLoader classes defined in previous steps.</p>
+<p>Finally per each epoch it will execute our loss functions against our training and validation data set and our preduction accuracy.</p>
+
+</div>
+</div>
+</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -843,7 +890,7 @@ window.onload = wrap_img;
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">learn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">learn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -870,69 +917,139 @@ window.onload = wrap_img;
   <tbody>
     <tr>
       <td>0</td>
-      <td>0.090545</td>
+      <td>0.121946</td>
+      <td>0.130713</td>
+      <td>0.958300</td>
+      <td>00:01</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>0.115404</td>
+      <td>0.126541</td>
+      <td>0.960900</td>
+      <td>00:01</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>0.114300</td>
+      <td>0.124315</td>
+      <td>0.961400</td>
+      <td>00:01</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>0.105167</td>
+      <td>0.120451</td>
+      <td>0.961200</td>
+      <td>00:01</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>0.109492</td>
+      <td>0.119531</td>
+      <td>0.962200</td>
+      <td>00:01</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>0.107586</td>
+      <td>0.125598</td>
+      <td>0.959600</td>
+      <td>00:01</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>0.104398</td>
+      <td>0.113637</td>
+      <td>0.964300</td>
+      <td>00:02</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>0.097125</td>
+      <td>0.113833</td>
+      <td>0.964700</td>
+      <td>00:01</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>0.096191</td>
+      <td>0.110783</td>
+      <td>0.965500</td>
+      <td>00:01</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>0.093987</td>
+      <td>0.112380</td>
+      <td>0.965500</td>
+      <td>00:01</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>0.090575</td>
       <td>0.108007</td>
       <td>0.966200</td>
       <td>00:01</td>
     </tr>
     <tr>
-      <td>1</td>
-      <td>0.088196</td>
+      <td>11</td>
+      <td>0.088197</td>
       <td>0.104899</td>
       <td>0.966700</td>
       <td>00:01</td>
     </tr>
     <tr>
-      <td>2</td>
+      <td>12</td>
       <td>0.090239</td>
       <td>0.108342</td>
       <td>0.966000</td>
       <td>00:01</td>
     </tr>
     <tr>
-      <td>3</td>
+      <td>13</td>
       <td>0.087355</td>
       <td>0.104934</td>
       <td>0.967000</td>
-      <td>00:02</td>
+      <td>00:01</td>
     </tr>
     <tr>
-      <td>4</td>
+      <td>14</td>
       <td>0.080858</td>
       <td>0.102985</td>
       <td>0.968600</td>
-      <td>00:02</td>
+      <td>00:01</td>
     </tr>
     <tr>
-      <td>5</td>
+      <td>15</td>
       <td>0.081753</td>
       <td>0.101288</td>
       <td>0.968400</td>
-      <td>00:02</td>
+      <td>00:01</td>
     </tr>
     <tr>
-      <td>6</td>
+      <td>16</td>
       <td>0.079057</td>
       <td>0.100700</td>
       <td>0.968800</td>
-      <td>00:02</td>
+      <td>00:01</td>
     </tr>
     <tr>
-      <td>7</td>
+      <td>17</td>
       <td>0.078785</td>
       <td>0.098953</td>
       <td>0.969800</td>
-      <td>00:02</td>
+      <td>00:01</td>
     </tr>
     <tr>
-      <td>8</td>
+      <td>18</td>
       <td>0.073720</td>
       <td>0.101644</td>
       <td>0.968800</td>
-      <td>00:02</td>
+      <td>00:01</td>
     </tr>
     <tr>
-      <td>9</td>
+      <td>19</td>
       <td>0.075326</td>
       <td>0.097657</td>
       <td>0.970700</td>
@@ -952,11 +1069,19 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Visualizing-Layer-Features">Visualizing Layer Features<a class="anchor-link" href="#Visualizing-Layer-Features"> </a></h3><p>In this final section we will use the parameters stored in our model and generate a small image. <em>I loved this part of the exercise</em> since it's where we can "see" how our network defines the features on the layer/s.</p>
+<h3 id="Training-Results">Training Results<a class="anchor-link" href="#Training-Results"> </a></h3><p>As you can see after <strong>40 epochs</strong> (previous table only shows the last 20 epochs) of training our new model we have a prediction accuracy of <strong>97%</strong> and our training and validation loss less that is less than <strong>10%</strong> which is telling us our model is really efficient and accurate when making predictions of handwritten digits.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Visualizing-Layer-Features">Visualizing Layer Features<a class="anchor-link" href="#Visualizing-Layer-Features"> </a></h3><p>So far we were able to create our data set, define our simple neural net, train and validate it and now lets try to visualize the features its uses to perform and recognize the digits.</p>
+<p>We will use the parameters stored in our model and generate a small image representing the features in the network that it recognizes. <em>I loved this part of the exercise</em> since it's where I could "see" how our network defines the features on the layer/s.</p>
 <p>The <em>nn.Sequential</em> function used in our model stores the different functions in a list. We can use the index to grab the layer we want to use for the rendering (which is layer 0).</p>
 
 <pre><code>simple_net[0].parameters()</code></pre>
-<p>You will see that the line above contains a tensor with 50 features each containing a vector of size 784. We will use what we did in the past to transform the vector into a 28x28 tensor and finally use the <em><a href="https://docs.fast.ai/torch_core.html#show_images">show_images</a></em> method to render that tensor as an image.</p>
+<p>You will see that the line above contains a tensor with 50 features, each containing a vector of size 784. We will use what we learned earlier to transform the vector into a 28x28 tensor and finally use the <em><a href="https://docs.fast.ai/torch_core.html#show_images">show_images</a></em> method to render that tensor as an image.</p>
 
 </div>
 </div>
@@ -1077,11 +1202,18 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Summary">Summary<a class="anchor-link" href="#Summary"> </a></h3><p>Thank you so much for reaching the end, I really appreciate you taking the time to reading and reviewing my post and joining me in my journey through Deep Learning.</p>
-<p>Today with this exercise we learned about the different modules FastAI exposes and how we can use them to build our custom model.</p>
+<h3 id="Summary">Summary<a class="anchor-link" href="#Summary"> </a></h3><p>Congratulations making it to the end, I really appreciate you joining me in my journey through Deep Learning journey!</p>
+<p>In this exercise we learned about the different modules FastAI exposes and how we can use them to build our custom model:</p>
+<ul>
+<li>DataLoader</li>
+<li>DataLoaders</li>
+<li>Learner</li>
+</ul>
 <p>We created our accuracy and loss function and also loaded the data into data loaders that helped us when we were training our model.</p>
-<p>Finally we explored the parameters resulting of the training and a potential path to render the parameters of a network to see the different features a model might use, and how they look</p>
-<p>I hope this was helpful and useful to you. If you were following the exercise that you found it interesting and fun to build.</p>
+<p>We trained a digit detection model with 96using those modules and were able to create an efficient model that recognizes handwritten digits from 0 to 9 with <strong>97%</strong> accuracy.</p>
+<p>Finally we explored the parameters of the resulting model and a potential path to render the features a model might use, and how they look when visualized.</p>
+<p>I hope this was helpful, interesting and fun to build for you as it was for me,</p>
+<p>Special thanks to my friend Josh Fleshner for helping me with language and editing of this blog post.</p>
 <p>Thanks again and see you on my next adventure.</p>
 <h3 id="Resources-and-References">Resources and References<a class="anchor-link" href="#Resources-and-References"> </a></h3><ul>
 <li>Jeremy Howard, Rachel Thomas and Sylvain Gugger, FastAI Course, <a href="https://course.fast.ai/videos/?lesson=4">https://course.fast.ai/videos/?lesson=4</a></li>
@@ -1097,7 +1229,7 @@ window.onload = wrap_img;
 
 
 
-  </div><a class="u-url" href="/gamescode/fastai/vision/2021/05/08/The-MNIST-Experiment.html" hidden></a>
+  </div><a class="u-url" href="/gamescode/fastai/vision/mnist/2021/05/08/The-MNIST-Experiment.html" hidden></a>
 </article>
       </div>
     </main><footer class="site-footer h-card">
